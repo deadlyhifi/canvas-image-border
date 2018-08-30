@@ -1,17 +1,13 @@
-function getAverageColour(img, startPoint = 0.0, endPoint = 1.0, samplePoints = 800) {
+function getAverageColour(img, startPoint = 0.0, endPoint = 1.0) {
+    const startTime = Date.now();
     if (startPoint > endPoint) {
         console.error('startPoint must be greater than endPoint');
         if (startPoint < 0) {
-            console.error('startPoint must be 0 or greater');
+            console.error('startPoint must be 0.0 or greater');
         }
         if (endPoint > 1) {
-            console.error('endPoint must be 1 or lesser');
+            console.error('endPoint must be 1.0 or lesser');
         }
-        return;
-    }
-
-    if (samplePoints % 4 !== 0) {
-        console.error('Sample occurence must be divisible by 4.');
         return;
     }
 
@@ -19,7 +15,7 @@ function getAverageColour(img, startPoint = 0.0, endPoint = 1.0, samplePoints = 
     const context = canvas.getContext && canvas.getContext('2d');
 
     if (!context) {
-        console.error('Sorry, canvas isn’t supported.');
+        console.error('Sorry, canvas isn’t supported in this browser.');
         return;
     }
 
@@ -33,6 +29,7 @@ function getAverageColour(img, startPoint = 0.0, endPoint = 1.0, samplePoints = 
     // calculate start and end points
     let start = data.length * startPoint;
     const end = (data.length * endPoint) - 4; // last R point is 4 from end
+    const samplePoints = 4;
     let pointsSampled = 0;
 
     while (start <= end) {
@@ -60,6 +57,8 @@ function getAverageColour(img, startPoint = 0.0, endPoint = 1.0, samplePoints = 
     rgb.b = Math.floor(rgb.b / pointsSampled);
 
     console.log(img.id, 'colour:', [rgb.r, rgb.g, rgb.b].join(','), 'sampled:', pointsSampled);
+    console.log(img.id + " took " + (Date.now() - startTime) / 1000 + " seconds to be calculated");
+
     return [rgb.r, rgb.g, rgb.b].join(',');
 }
 
@@ -67,26 +66,32 @@ function addBorder(element, colour) {
     element.style.border = '10px solid rgb(' + colour + ')';
 }
 
-const image0 = document.getElementById('image0');
-const image0colour = getAverageColour(image0);
-addBorder(image0, image0colour);
+addBorder(
+    document.getElementById('image0'),
+    getAverageColour(image0, 0, 0.5)
+);
 
-const image1 = document.getElementById('image1');
-const image1colour = getAverageColour(image1);
-addBorder(image1, image1colour);
+addBorder(
+    document.getElementById('image1'),
+    getAverageColour(image1)
+);
 
-const image2 = document.getElementById('image2');
-const image2colour = getAverageColour(image2);
-addBorder(image2, image2colour);
+addBorder(
+    document.getElementById('image2'),
+    getAverageColour(image2, 0.4, 0.6)
+);
 
-const image3 = document.getElementById('image3');
-const image3colour = getAverageColour(image3);
-addBorder(image3, image3colour);
+addBorder(
+    document.getElementById('image3'),
+    getAverageColour(image3)
+);
 
-const image4 = document.getElementById('image4');
-const image4colour = getAverageColour(image4);
-addBorder(image4, image4colour);
+addBorder(
+    document.getElementById('image4'),
+    getAverageColour(image4, 0.8, 0.9)
+);
 
-const image5 = document.getElementById('image5');
-const image5colour = getAverageColour(image5);
-addBorder(image5, image5colour);
+addBorder(
+    document.getElementById('image5'),
+    getAverageColour(image5, 0.3, 0.4)
+);
